@@ -2,21 +2,12 @@ package main
 
 import (
 	"net/http"
-	"text/template"
+
+	"github.com/fomiller/go-mongodb-tutorial/API"
 )
 
-var tpl *template.Template
-
-func init() {
-	tpl = template.Must(template.ParseGlob("./templates/*"))
-}
-
 func main() {
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/", API.IndexHandler)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.ListenAndServe(":8080", nil)
-}
-
-func indexHandler(res http.ResponseWriter, req *http.Request) {
-	tpl.ExecuteTemplate(res, "index.html", nil)
 }
