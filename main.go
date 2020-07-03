@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/fomiller/go-mongodb-tutorial/API"
+	"github.com/fomiller/go-mongodb-tutorial/config"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -19,25 +19,9 @@ type Trainer struct {
 }
 
 func main() {
-	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-
-	// connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Check the connection
-	err = client.Ping(context.TODO(), nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// Log message if successful
-	fmt.Println("Connected to MongoDB!")
 
 	// create collection trainer
-	collection := client.Database("go-mongo-tut").Collection("trainers")
+	collection := config.CLIENT.Database("go-mongo-tut").Collection("trainers")
 
 	// create trainers to add into database
 	ash := Trainer{"Ash", 10, "Pallet Town"}
