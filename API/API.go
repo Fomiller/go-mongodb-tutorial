@@ -2,6 +2,7 @@ package API
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -39,8 +40,12 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// successful insert
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
+
+	// respond with json
+	json.NewEncoder(res).Encode(insertResult)
 
 }
 
@@ -54,6 +59,7 @@ func CreateManyHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Println("inserted multiple documents: ", insertManyResult.InsertedIDs)
+	json.NewEncoder(res).Encode(insertManyResult)
 
 }
 
@@ -73,6 +79,7 @@ func UpdateHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Printf("Matched %v documents and updated %v documents.\n", updateResult.MatchedCount, updateResult.ModifiedCount)
+	json.NewEncoder(res).Encode(updateResult)
 
 }
 
@@ -86,7 +93,7 @@ func FindHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Printf("Found a single document: %+v\n", result)
-
+	json.NewEncoder(res).Encode(result)
 }
 
 func FindManyHandler(res http.ResponseWriter, req *http.Request) {
@@ -125,6 +132,7 @@ func FindManyHandler(res http.ResponseWriter, req *http.Request) {
 	cur.Close(context.TODO())
 
 	fmt.Printf("Found multiple documents (array of poointers): %+v\n", results)
+	json.NewEncoder(res).Encode(results)
 
 }
 
