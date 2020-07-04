@@ -19,6 +19,13 @@
     <input type="text" name="city" id="city" placeholder="city">
     <input type="submit">
   </form>
+
+  {{range .}}
+    <h2>{{.Name}}</h2>
+    <h2>{{.Age}}</h2>
+    <h2>{{.City}}</h2>
+  {{end}}
+
   <script>
     $("#trainerForm").submit(function(e){
       e.preventDefault()
@@ -33,9 +40,9 @@
         type:"POST",
         url:"/api/create",
         data: dataStr,
-        // success: function(){
-        //   alert('form was submited')
-        // },
+        success: function(response){
+          console.log(response)
+        },
       })
     })
 
