@@ -40,12 +40,13 @@ func init() {
 
 func IndexHandler(res http.ResponseWriter, req *http.Request) {
 
-	config.TPL.ExecuteTemplate(res, "index.html", nil)
+	config.TPL.ExecuteTemplate(res, "index.gohtml", nil)
 
 }
 
 func CreateHandler(res http.ResponseWriter, req *http.Request) {
 	// init trainer variable for decoding
+
 	var newTrainer models.Trainer
 	if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
 		fmt.Println(err)
@@ -60,7 +61,7 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 	// // successful insert
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 
-	// // respond with json
+	// respond with json
 	res.Header().Set("content-type", "application/json")
 	json.NewEncoder(res).Encode(newTrainer)
 
