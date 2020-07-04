@@ -39,41 +39,8 @@ func init() {
 }
 
 func IndexHandler(res http.ResponseWriter, req *http.Request) {
-	if req.Method == http.MethodPost {
-		// V1
-		// body, err := ioutil.ReadAll(req.Body)
-		// if err != nil {
-		// 	panic(err)
-		// }
-		// log.Println(string(body))
-		// var newTrainer Test
-		// err = json.Unmarshal(body, &newTrainer)
-		// if err != nil {
-		// 	panic(err)
-		// }
-		// log.Println(newTrainer.Name)
 
-		// V2
-		// err := req.ParseForm()
-		// if err != nil {
-		// 	panic(err)
-		// }
-		// fmt.Printf(req.FormValue("name"))
-		// fmt.Printf(req.FormValue("age"))
-		// fmt.Printf(req.FormValue("city"))
-		// fmt.Println(req.Form)
-
-		// V3
-		// var newTrainer Test
-		// if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
-		// 	fmt.Println(err)
-		// }
-		// fmt.Println(newTrainer)
-		// fmt.Printf("%T", newTrainer)
-	}
-	if req.Method == http.MethodGet {
-		config.TPL.ExecuteTemplate(res, "index.html", nil)
-	}
+	config.TPL.ExecuteTemplate(res, "index.html", nil)
 
 }
 
@@ -196,3 +163,37 @@ func DeleteHandler(res http.ResponseWriter, req *http.Request) {
 	fmt.Printf("%v Document Deleted", deleteResult.DeletedCount)
 
 }
+
+// This is all code that i was using to read and test parsing the request body in learning how to get data from form submission
+// I am keeping this here for possible reference later...
+
+// V1 read Request body and conver to a string then unmarshal string into go struct
+// body, err := ioutil.ReadAll(req.Body)
+// if err != nil {
+// 	panic(err)
+// }
+// log.Println(string(body))
+// var newTrainer Test
+// err = json.Unmarshal(body, &newTrainer)
+// if err != nil {
+// 	panic(err)
+// }
+// log.Println(newTrainer.Name)
+
+// V2 working with parseForm method. NOTE this still works if form is not submitted in typical fashion but through a strigified JSON in ajax request.
+// err := req.ParseForm()
+// if err != nil {
+// 	panic(err)
+// }
+// fmt.Printf(req.FormValue("name"))
+// fmt.Printf(req.FormValue("age"))
+// fmt.Printf(req.FormValue("city"))
+// fmt.Println(req.Form)
+
+// V3 HOW IT WAS SUPPOSED TO WORK IN THE FIRST PLACE
+// var newTrainer Test
+// if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
+// 	fmt.Println(err)
+// }
+// fmt.Println(newTrainer)
+// fmt.Printf("%T", newTrainer)
