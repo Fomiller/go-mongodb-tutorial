@@ -25,27 +25,77 @@ var (
 	filter = bson.D{{Key: "name", Value: "Ash"}}
 )
 
+type Test struct {
+	Name string `json:"name,omitempty"`
+	Age  int    `json:"age,omitempty"`
+	City string `json:"city,omitempty"`
+}
+
+var jsonTest = `{"name":"Forrest", "age": 26, "city": "Franklin"`
+
 func init() {
 	// create collection trainer
 	collection = config.CLIENT.Database("go-mongo-tut").Collection("trainers")
 }
 
 func IndexHandler(res http.ResponseWriter, req *http.Request) {
-	config.TPL.ExecuteTemplate(res, "index.html", nil)
+	if req.Method == http.MethodPost {
+		// V1
+		// body, err := ioutil.ReadAll(req.Body)
+		// if err != nil {
+		// 	panic(err)
+		// }
+		// log.Println(string(body))
+		// var newTrainer Test
+		// err = json.Unmarshal(body, &newTrainer)
+		// if err != nil {
+		// 	panic(err)
+		// }
+		// log.Println(newTrainer.Name)
+
+		// V2
+		// err := req.ParseForm()
+		// if err != nil {
+		// 	panic(err)
+		// }
+		// fmt.Printf(req.FormValue("name"))
+		// fmt.Printf(req.FormValue("age"))
+		// fmt.Printf(req.FormValue("city"))
+		// fmt.Println(req.Form)
+
+		// V3
+		// var newTrainer Test
+		// if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
+		// 	fmt.Println(err)
+		// }
+		// fmt.Println(newTrainer)
+		// fmt.Printf("%T", newTrainer)
+	}
+	if req.Method == http.MethodGet {
+		config.TPL.ExecuteTemplate(res, "index.html", nil)
+	}
 
 }
 
 func CreateHandler(res http.ResponseWriter, req *http.Request) {
-	insertResult, err := collection.InsertOne(context.TODO(), ash)
+	// init trainer variable for decoding
+	var newTrainer models.Trainer
+	if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
+		fmt.Println(err)
+	}
+
+	// insert into database
+	insertResult, err := collection.InsertOne(context.TODO(), newTrainer)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// successful insert
+	// // successful insert
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 
-	// respond with json
-	json.NewEncoder(res).Encode(insertResult)
+	// // respond with json
+	res.Header().Set("content-type", "application/json")
+	json.NewEncoder(res).Encode(newTrainer)
 
 }
 
