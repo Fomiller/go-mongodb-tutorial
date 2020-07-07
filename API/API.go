@@ -63,8 +63,12 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 
 	// respond with json
 	res.Header().Set("content-type", "application/json")
-	json.NewEncoder(res).Encode(newTrainer)
-
+	// json.NewEncoder(res).Encode(newTrainer)
+	newTrainerJSON, err := json.Marshal(newTrainer)
+	if err != nil {
+		log.Panic(err)
+	}
+	res.Write(newTrainerJSON)
 }
 
 func CreateManyHandler(res http.ResponseWriter, req *http.Request) {
