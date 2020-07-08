@@ -61,15 +61,15 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 
 	// respond with json
-	res.Header().Set("content-type", "application/json")
-	// json.NewEncoder(res).Encode(newTrainer)
-	newTrainerJSON, err := json.Marshal(newTrainer)
-	if err != nil {
-		log.Panic(err)
-	}
-	res.Write(newTrainerJSON)
+	// res.Header().Set("content-type", "application/json")
+	// // json.NewEncoder(res).Encode(newTrainer)
+	// newTrainerJSON, err := json.Marshal(newTrainer)
+	// if err != nil {
+	// 	log.Panic(err)
+	// }
+	// res.Write(newTrainerJSON)
 
-	// config.TPL.ExecuteTemplate(res, "updated.gohtml", newTrainer)
+	config.TPL.ExecuteTemplate(res, "updated.gohtml", newTrainer)
 }
 
 func CreateManyHandler(res http.ResponseWriter, req *http.Request) {
