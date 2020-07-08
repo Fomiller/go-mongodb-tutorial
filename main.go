@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/fomiller/go-mongodb-tutorial/API"
+	"github.com/fomiller/go-mongodb-tutorial/config"
 )
 
 func main() {
 	// Route Handlers
-	http.HandleFunc("/", API.IndexHandler)
+	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/api/create", API.CreateHandler)
 	http.HandleFunc("/api/createmany", API.CreateManyHandler)
 	http.HandleFunc("/api/update", API.UpdateHandler)
@@ -18,4 +19,10 @@ func main() {
 	// handle favicon
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.ListenAndServe(":8080", nil)
+}
+
+func IndexHandler(res http.ResponseWriter, req *http.Request) {
+
+	config.TPL.ExecuteTemplate(res, "index.gohtml", nil)
+
 }
