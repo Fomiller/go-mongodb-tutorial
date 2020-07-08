@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/fomiller/go-mongodb-tutorial/config"
 	"github.com/fomiller/go-mongodb-tutorial/models"
@@ -38,19 +39,17 @@ func init() {
 	collection = config.CLIENT.Database("go-mongo-tut").Collection("trainers")
 }
 
-func IndexHandler(res http.ResponseWriter, req *http.Request) {
-
-	config.TPL.ExecuteTemplate(res, "index.gohtml", nil)
-
-}
-
 func CreateHandler(res http.ResponseWriter, req *http.Request) {
 	// init trainer variable for decoding
-
+	var err error
 	var newTrainer models.Trainer
-	if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
-		fmt.Println(err)
-	}
+	newTrainer.Name = req.FormValue("name")
+	newTrainer.Age, _ = strconv.Atoi(req.FormValue("age"))
+	newTrainer.City = req.FormValue("city")
+
+	// if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
+	// 	fmt.Println(err)
+	// }
 
 	// insert into database
 	insertResult, err := collection.InsertOne(context.TODO(), newTrainer)
@@ -69,6 +68,8 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 		log.Panic(err)
 	}
 	res.Write(newTrainerJSON)
+
+	// config.TPL.ExecuteTemplate(res, "updated.gohtml", newTrainer)
 }
 
 func CreateManyHandler(res http.ResponseWriter, req *http.Request) {
