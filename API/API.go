@@ -47,10 +47,6 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 	newTrainer.Age, _ = strconv.Atoi(req.FormValue("age"))
 	newTrainer.City = req.FormValue("city")
 
-	// if err := json.NewDecoder(req.Body).Decode(&newTrainer); err != nil {
-	// 	fmt.Println(err)
-	// }
-
 	// insert into database
 	insertResult, err := collection.InsertOne(context.TODO(), newTrainer)
 	if err != nil {
@@ -59,15 +55,6 @@ func CreateHandler(res http.ResponseWriter, req *http.Request) {
 
 	// // successful insert
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
-
-	// respond with json
-	// res.Header().Set("content-type", "application/json")
-	// // json.NewEncoder(res).Encode(newTrainer)
-	// newTrainerJSON, err := json.Marshal(newTrainer)
-	// if err != nil {
-	// 	log.Panic(err)
-	// }
-	// res.Write(newTrainerJSON)
 
 	config.TPL.ExecuteTemplate(res, "updated.gohtml", newTrainer)
 }
