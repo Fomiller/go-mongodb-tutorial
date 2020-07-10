@@ -12,7 +12,6 @@ import (
 	"github.com/fomiller/go-mongodb-tutorial/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
@@ -109,40 +108,41 @@ func FindHandler(res http.ResponseWriter, req *http.Request) {
 func FindManyHandler(res http.ResponseWriter, req *http.Request) {
 	// find multiple
 	// pass these options to the Find Method
-	findOptions := options.Find()
-	findOptions.SetLimit(10)
+	// findOptions := options.Find()
+	// findOptions.SetLimit(10)
 
-	// Create Slice to store decoded documents in
-	var results []*models.Trainer
+	// // Create Slice to store decoded documents in
+	// var results []*models.Trainer
 
-	// passing bson.D{{}} as the filer matches all documents in the collection
-	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// // passing bson.D{{}} as the filer matches all documents in the collection
+	// cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	// Finding multiple documents returns a cursor
-	// Iterating through the cursor allows us to decode documents one at a time
-	for cur.Next(context.TODO()) {
-		// create a value into which the single document can be decoded
-		var elem models.Trainer
-		err := cur.Decode(&elem)
-		if err != nil {
-			log.Fatal(err)
-		}
+	// // Finding multiple documents returns a cursor
+	// // Iterating through the cursor allows us to decode documents one at a time
+	// for cur.Next(context.TODO()) {
+	// 	// create a value into which the single document can be decoded
+	// 	var elem models.Trainer
+	// 	err := cur.Decode(&elem)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
 
-		results = append(results, &elem)
-	}
+	// 	results = append(results, &elem)
+	// }
 
-	if err := cur.Err(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := cur.Err(); err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	// close the cursor once finished
-	cur.Close(context.TODO())
+	// // close the cursor once finished
+	// cur.Close(context.TODO())
 
-	fmt.Printf("Found multiple documents (array of poointers): %+v\n", results)
-	config.TPL.ExecuteTemplate(res, "trainers.gohtml", results)
+	// fmt.Printf("Found multiple documents (array of poointers): %+v\n", results)
+	allTrainers := models.AllTrainers()
+	config.TPL.ExecuteTemplate(res, "trainers.gohtml", allTrainers)
 	// json.NewEncoder(res).Encode(results)
 
 }
