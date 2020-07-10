@@ -110,7 +110,7 @@ func FindManyHandler(res http.ResponseWriter, req *http.Request) {
 	// find multiple
 	// pass these options to the Find Method
 	findOptions := options.Find()
-	findOptions.SetLimit(2)
+	findOptions.SetLimit(10)
 
 	// Create Slice to store decoded documents in
 	var results []*models.Trainer
@@ -142,7 +142,8 @@ func FindManyHandler(res http.ResponseWriter, req *http.Request) {
 	cur.Close(context.TODO())
 
 	fmt.Printf("Found multiple documents (array of poointers): %+v\n", results)
-	json.NewEncoder(res).Encode(results)
+	config.TPL.ExecuteTemplate(res, "trainers.gohtml", results)
+	// json.NewEncoder(res).Encode(results)
 
 }
 
