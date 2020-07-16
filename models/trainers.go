@@ -16,6 +16,7 @@ import (
 
 var (
 	collection *mongo.Collection
+	filter     = bson.D{{Key: "name", Value: "Forrest"}}
 )
 
 type Trainer struct {
@@ -66,8 +67,16 @@ func AllTrainers() []*Trainer {
 	return results
 }
 
-func OneTrainer() {
+func OneTrainer() Trainer {
+	var result Trainer
 
+	if err := collection.FindOne(context.TODO(), filter).Decode(&result); err != nil {
+		log.Panic(err)
+	}
+
+	fmt.Printf("Found a single document: %+v\n", result)
+	// json.NewEncoder(res).Encode(result)
+	return result
 }
 
 func CreateTrainer(req *http.Request) {
