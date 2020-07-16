@@ -95,13 +95,16 @@ func UpdateHandler(res http.ResponseWriter, req *http.Request) {
 func FindHandler(res http.ResponseWriter, req *http.Request) {
 	// Find
 	// create variable to be pointed at when returning result from query
-	var result models.Trainer
+	// var result models.Trainer
 
-	if err := collection.FindOne(context.TODO(), filter).Decode(&result); err != nil {
-		log.Fatal(err)
-	}
+	// if err := collection.FindOne(context.TODO(), filter).Decode(&result); err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Printf("Found a single document: %+v\n", result)
+	// fmt.Printf("Found a single document: %+v\n", result)
+	// json.NewEncoder(res).Encode(result)
+	result := models.OneTrainer()
+	// fmt.Printf("Found FROM API: %+v\n", result)
 	json.NewEncoder(res).Encode(result)
 }
 
